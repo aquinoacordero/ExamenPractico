@@ -1,6 +1,7 @@
 package com.example.android.examenpractico;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -63,13 +64,19 @@ public class ItemDetailFragment extends Fragment {
         //creamos el codigo que hara que al pulsar el boton borre el contenido del item_list y ponga empty
         Button button = (Button) rootView.findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 ItemListFragment frag = (ItemListFragment) getFragmentManager().findFragmentById(R.id.item_list);
                 if (frag == null || !frag.isInLayout()) {
                     getActivity().finish();
+                    //cargamos el intent
+                    Intent i = new Intent();
+                    i.putExtra("resultado", "Activity Cerrada");
+                    getActivity().setResult(Activity.RESULT_OK, i);
+                    getActivity().finish();//Cerramos
                 } else {
-                    ((TextView) rootView.findViewById(R.id.item_detail)).setText("Empty");
+                    ((TextView) rootView.findViewById(R.id.item_detail)).setText("  ");
                 }
 
             }

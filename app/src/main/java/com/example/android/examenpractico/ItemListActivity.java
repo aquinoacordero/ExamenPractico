@@ -1,5 +1,6 @@
 package com.example.android.examenpractico;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
+import android.widget.Toast;
 
 
 /**
@@ -33,6 +35,7 @@ public class ItemListActivity extends AppCompatActivity
      * device.
      */
     private boolean mTwoPane;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,12 +72,33 @@ public class ItemListActivity extends AppCompatActivity
         // TODO: If exposing deep links into your app, handle intents here.
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+            //Codigo del intent
+            if (resultCode == Activity.RESULT_OK) {
+                String result = data.getStringExtra("resultado");
+                Toast.makeText(ItemListActivity.this, result,
+                        Toast.LENGTH_SHORT).show();
+                //Toast con la informacion enviada en el intent
+            }
+        }
+    }
+
     /**
      * Callback method from {@link ItemListFragment.Callbacks}
      * indicating that the item with the given ID was selected.
      */
     @Override
     public void onItemSelected(String id) {
+        //toast paara avisar de que esta en modo land
+        Boolean bool = getResources().getBoolean(R.bool.dual_pane);
+        if (bool) {
+
+            Toast.makeText(ItemListActivity.this, "Tumbado",
+                    Toast.LENGTH_SHORT).show();
+        }
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
@@ -92,7 +116,7 @@ public class ItemListActivity extends AppCompatActivity
             // for the selected item ID.
             Intent detailIntent = new Intent(this, ItemDetailActivity.class);
             detailIntent.putExtra(ItemDetailFragment.ARG_ITEM_ID, id);
-            startActivity(detailIntent);
+            startActivityForResult(detailIntent, 1);//llamamos al onActivityResult
         }
     }
 }
