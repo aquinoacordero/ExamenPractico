@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.android.examenpractico.dummy.DummyContent;
@@ -57,9 +58,23 @@ public class ItemDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_item_detail, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_item_detail, container, false);
 
-        // Show the dummy content as text in a TextView.
+        //creamos el codigo que hara que al pulsar el boton borre el contenido del item_list y ponga empty
+        Button button = (Button) rootView.findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ItemListFragment frag = (ItemListFragment) getFragmentManager().findFragmentById(R.id.item_list);
+                if (frag == null || !frag.isInLayout()) {
+                    getActivity().finish();
+                } else {
+                    ((TextView) rootView.findViewById(R.id.item_detail)).setText("Empty");
+                }
+
+            }
+        });
+
         if (mItem != null) {
             ((TextView) rootView.findViewById(R.id.item_detail)).setText(mItem.details);
         }
